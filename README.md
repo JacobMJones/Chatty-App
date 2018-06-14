@@ -3,6 +3,8 @@ Chatty App
 
 A basic chat app made with React and Web Sockets.
 
+!["Screenshot"](boiler/docs/screenshot.png)
+
 ### Usage
 
 Clone the git and create your own git repo.
@@ -18,6 +20,4 @@ open http://localhost:3000
 ### Dependencies
 
 * React
-* Webpack
-* [babel-loader](https://github.com/babel/babel-loader)
-* [webpack-dev-server](https://github.com/webpack/webpack-dev-server)
+* Express
