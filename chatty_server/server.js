@@ -18,30 +18,38 @@ const server = express()
 
 const wss = new SocketServer({ server });
 
-wss.on('connection', (ws) => {
-    console.log('Client connected');
 
+wss.on('connection', (ws) => {
+    loginLogout('in', wss.clients.size);
     ws.on('message', message => {
         message = JSON.parse(message);
-
         switch (message.type) {
             case "incomingMessage":
                 message.id = uuidv4();
-                wss.clients.forEach(client => {
-                    client.send(JSON.stringify(message));
-                })
+                sendMessageToAllClients(message);
                 break;
             case "incomingNotification":
-
-                wss.clients.forEach(client => {
-                    client.send(JSON.stringify(message));
-                })
+                sendMessageToAllClients(message);
                 break;
             default:
-                console.log('in server and it aint working');
+                console.log('In socket server, problem with message type');
         }
     })
-
-    // Set up a callback for when a client closes the socket. This usually means they closed their browser.
-    ws.on('close', () => console.log('Client disconnected'));
+    ws.on('close', () => {
+        console.log('Client disconnected');
+        loginLogout('out', wss.clients.size);
+    });
 });
+
+const loginLogout = (inorout, clients) => {
+    let loginObject = { type: 'login', count: clients };
+    wss.clients.forEach(client => {
+        client.send(JSON.stringify(loginObject));
+    })
+    console.log(`User logged ${inorout}. Total users: ${clients}`);
+}
+const sendMessageToAllClients = (message) => {
+    wss.clients.forEach(client => {
+        client.send(JSON.stringify(message));
+    })
+}

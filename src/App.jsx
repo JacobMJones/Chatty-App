@@ -9,6 +9,7 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      userCount:0,
       currentUser: { name: "Bob" }, // optional. if currentUser is not defined, it means the user is Anonymous
       messages: [],
       type: ''
@@ -25,7 +26,7 @@ class App extends Component {
     };
 
     this.socket.addEventListener('message', (event) => {
-
+      console.log('this socket recieved this message: ', event.data);
       let message = JSON.parse(event.data);
       switch (message.type) {
         case "incomingMessage":
@@ -36,6 +37,12 @@ class App extends Component {
 
           const notification = this.state.messages.concat(message);
           this.setState({ messages: notification });
+          break;
+
+          case "login":
+          console.log("I see a login", event);
+          //let userCount = this.state.userCount + 1;
+          this.setState({userCount:message.count});
           break;
         default:
 
@@ -58,16 +65,15 @@ class App extends Component {
   };
 
   render() {
-    const { currentUser, messages, id, type } = this.state;
+    const { currentUser, messages, id, type, userCount } = this.state;
     return (
       <div>
-        <NavBar />
+        <NavBar userCount={userCount}/>
         <MessageList messages={messages} id={id} type={type} />
         <ChatBar currentUser={currentUser} addMessageToState={this.addMessageToState} sendNotificationMessage={this.sendNotificationMessage} />
 
       </div>
     )
-
   }
 }
 
