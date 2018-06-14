@@ -10,49 +10,60 @@ class App extends Component {
     super(props);
     this.state = {
       currentUser: { name: "Bob" }, // optional. if currentUser is not defined, it means the user is Anonymous
-      messages: []
-      type: '';
+      messages: [],
+      type: ''
     };
-  this.socket = null;
+    this.socket = null;
 
   }
 
   componentDidMount() {
     this.socket = new WebSocket('ws://localhost:3002');
-   
+
     this.socket.onopen = event => {
-      // this.socket.send("socket onopen");
-      console.log('it werks');
-     };
-     this.socket.addEventListener('message', (event) => {
-     let message = JSON.parse(event.data);
-     console.log('m', message);
-     const messages = this.state.messages.concat(message);
-      //const messages = this.state.messages.concat(chattyMessage);
-      this.setState({ messages: messages });
+      console.log('connected to server');
+    };
+
+    this.socket.addEventListener('message', (event) => {
+
+      let message = JSON.parse(event.data);
+      switch (message.type) {
+        case "incomingMessage":
+          const messages = this.state.messages.concat(message);
+          this.setState({ messages: messages });
+          break;
+        case "incomingNotification":
+
+          const notification = this.state.messages.concat(message);
+          this.setState({ messages: notification });
+          break;
+        default:
+
+          throw new Error("Unknown event type " + data.type);
+      }
+
     })
+
   }
 
-  changeUserName = userName => {
-    console.log('new username', userName, 'type', typeof userName);
-    this.setState({currentUser:userName});
-   console.log('state after name change', this.state);
+  sendNotificationMessage = notificationMessage => {
+    console.log('in send notification message', notificationMessage);
+    const current = {name : notificationMessage.username};
+    this.setState({currentUser: current});
+    this.socket.send(JSON.stringify(notificationMessage));
   }
-  
-  addMessageToState = chattyMessage => {
-    console.log('returned chatty message', chattyMessage);
-    
+
+  addMessageToState = chattyMessage => {;
     this.socket.send(JSON.stringify(chattyMessage));
   };
 
   render() {
-    const { currentUser, messages, id } = this.state;
-
+    const { currentUser, messages, id, type } = this.state;
     return (
       <div>
         <NavBar />
-        <MessageList messages={messages} id={id} />
-        <ChatBar currentUser={currentUser} addMessageToState={this.addMessageToState} changeUserName={this.changeUserName} />
+        <MessageList messages={messages} id={id} type={type} />
+        <ChatBar currentUser={currentUser} addMessageToState={this.addMessageToState} sendNotificationMessage={this.sendNotificationMessage} />
 
       </div>
     )

@@ -4,10 +4,10 @@ import SystemMessage from './SystemMessage.jsx';
 
 class MessageList extends Component {
   render() {
+    console.log('in message list', this.props.messages);
     const messageItem = this.props.messages.map( message => (
-      <Message username={message.username} content={message.content} key={message.id}/>
+      <Message type ={message.type} oldUserName={message.oldUserName} username={message.username} content={message.content} key={message.id}/>
     ));
-    console.log(messageItem)
     return (
       <main className="messages">
         {messageItem}
