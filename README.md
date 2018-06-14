@@ -1,4 +1,4 @@
-React Boilerplate
+Chatty App
 =====================
 
 A basic chat app made with React and Web Sockets.
