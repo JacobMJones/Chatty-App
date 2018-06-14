@@ -10,14 +10,13 @@ class App extends Component {
       userCount: 0,
       currentUser: { name: "Anonymous" },
       messages: [],
-      type: ''
     };
     this.socket = null;
   }
 
   componentDidMount() {
-    this.socket = new WebSocket('ws://localhost:3002');
-    this.socket.onopen = event => {
+    this.socket = new WebSocket('ws://localhost:3001');
+    this.socket.onopen = () => {
       console.log('connected to server');
     };
 
@@ -33,7 +32,7 @@ class App extends Component {
           const notification = this.state.messages.concat(message);
           this.setState({ messages: notification });
           break;
-        case "login":
+        case "connections":
           this.setState({ userCount: message.count });
           break;
         default:
@@ -57,7 +56,7 @@ class App extends Component {
     return (
       <div>
         <NavBar userCount={userCount} />
-        <MessageList messages={messages} id={id} type={type} />
+        <MessageList messages={messages}  />
         <ChatBar currentUser={currentUser} addMessageToState={this.addMessageToState} sendNotificationMessage={this.sendNotificationMessage} />
       </div>
     )

@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 
 class ChatBar extends Component {
-
     render() {
         return (
             <footer className="chatbar">
@@ -9,13 +8,9 @@ class ChatBar extends Component {
                 <input className="chatbar-message" onKeyPress={this.handleKeyPressSendContent} placeholder="Type a message and hit ENTER" />
             </footer>)
     }
-
-    handleKeyPressSendContent = (event) => {
-        
-        if (event.key == 'Enter') {
-           
-            let chattyMessage = {
-                
+    handleKeyPressSendContent = (event) => {    
+        if (event.key == 'Enter') {          
+            let chattyMessage = {               
                 username: this.props.currentUser.name,
                 content: event.target.value,
                 type:'incomingMessage'
@@ -24,25 +19,16 @@ class ChatBar extends Component {
             event.target.value ="";
         }
     }
-    handleKeyPressChangeName = (event) => {
-        
+    handleKeyPressChangeName = (event) => {   
         if (event.key == 'Enter') {
-            console.log('change username event', event.target.value);
-
+            if(event.target.value === '') event.target.value = 'Anonymous';
             let u = {
                 oldUserName: this.props.currentUser.name,
                 username: event.target.value,   
                 type: 'incomingNotification'           
             }
-            console.log('u object', u);
-            this.props.sendNotificationMessage(u);       
-         
+            this.props.sendNotificationMessage(u);             
         }
-        
-
-
     }
 }
-
-
 export default ChatBar;
