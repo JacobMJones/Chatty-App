@@ -9,7 +9,6 @@ Clone the git and create your own git repo.
 
 ```
 Install the dependencies and start the server.
-
 ```
 npm install
 npm start
