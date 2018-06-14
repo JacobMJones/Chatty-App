@@ -3,7 +3,7 @@ Chatty App
 
 A basic chat app made with React and Web Sockets.
 
-!["Screenshot"](boiler/docs/screenshot.png)
+!["Screenshot"](https://github.com/JacobMJones/boiler/blob/master/docs/screenshot.png?raw=true)
 
 ### Usage
 
