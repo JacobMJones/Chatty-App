@@ -9,13 +9,13 @@ const server = express()
 const wss = new SocketServer({ server });
 
 
-wss.on('connection', (ws) => {   
+wss.on('connection', (ws) => {
     loginLogout('in');
     ws.on('message', message => {
         message = JSON.parse(message);
         message.id = uuidv4();
         switch (message.type) {
-            case "incomingMessage":            
+            case "incomingMessage":
                 sendMessageToAllClients(message);
                 break;
             case "incomingNotification":
@@ -36,7 +36,7 @@ const loginLogout = (change) => {
     console.log(`User logged ${change}. Total users: ${clients}`);
 }
 const sendMessageToAllClients = (message) => {
-    
+
     wss.clients.forEach(client => {
         client.send(JSON.stringify(message));
     })

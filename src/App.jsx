@@ -6,6 +6,7 @@ import MessageList from './MessageList.jsx';
 class App extends Component {
   constructor(props) {
     super(props);
+    
     this.state = {
       userCount: 0,
       currentUser: { name: "Anonymous" },
@@ -14,12 +15,13 @@ class App extends Component {
     this.socket = null;
   }
 
+//If the component mounts then this code will run
   componentDidMount() {
     this.socket = new WebSocket('ws://localhost:3001');
     this.socket.onopen = () => {
       console.log('connected to server');
     };
-
+//this adds an event listener, when messages come in the switch will decide what to do with them
     this.socket.addEventListener('message', (event) => {
       let message = JSON.parse(event.data);
     
@@ -40,7 +42,7 @@ class App extends Component {
       }
     })
   }
-
+//This sends notification messages
   sendNotificationMessage = notificationMessage => {
     const current = { name: notificationMessage.username };
     this.setState({ currentUser: current });
@@ -50,7 +52,7 @@ class App extends Component {
   addMessageToState = chattyMessage => {
     this.socket.send(JSON.stringify(chattyMessage));
   };
-
+//This will render the page's HTML
   render() {
     const { currentUser, messages, id, type, userCount } = this.state;
     return (
@@ -62,6 +64,7 @@ class App extends Component {
     )
   }
 }
+//this exports the app component
 export default App;
 
 
